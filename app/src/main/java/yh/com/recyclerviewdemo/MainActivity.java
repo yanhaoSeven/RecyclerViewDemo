@@ -16,7 +16,6 @@ import yh.com.recyclerviewdemo.util.DividerItemDecoration;
 
 
 public class MainActivity extends AppCompatActivity {
-    //新控件使用
     private RecyclerView mRecyclerView;
     private LinearLayoutManager manager;
     private MyAdapter adapter;
