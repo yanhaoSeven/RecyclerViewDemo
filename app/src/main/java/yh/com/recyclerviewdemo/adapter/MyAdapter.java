@@ -2,7 +2,6 @@ package yh.com.recyclerviewdemo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,8 +97,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         }
     }
 
-    public void addList(int position, List<String> list) {
-        list.addAll(position, list);
+    public void addList(List<String> updata_list) {
+        int position=list.size();
+        list.addAll(position, updata_list);
         notifyItemInserted(position);
     }
 
