@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager manager;
     private MyAdapter adapter;
     private List<String> list;
-    private int index = 0;
+    private int index = 0;//加载下标
     private boolean loading = false;
 
     @Override
