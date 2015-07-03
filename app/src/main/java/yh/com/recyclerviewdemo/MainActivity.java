@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private List<String> list;
     private int index = 0;//加载下标
     private boolean loading = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
