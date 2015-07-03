@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
             }
 
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (!loading && manager.findLastVisibleItemPosition() == list.size() - 1) {
