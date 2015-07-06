@@ -15,13 +15,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import yh.com.recyclerviewdemo.MainActivity;
+import yh.com.recyclerviewdemo.Data.MyData;
 import yh.com.recyclerviewdemo.R;
 import yh.com.recyclerviewdemo.adapter.MyAdapter;
-import yh.com.recyclerviewdemo.data.MyData;
 import yh.com.recyclerviewdemo.util.DividerItemDecoration;
-
-import static yh.com.recyclerviewdemo.R.layout.fragment1;
 
 /**
  * Created by muji on 2015/7/6.
