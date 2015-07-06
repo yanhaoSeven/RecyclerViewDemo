@@ -101,6 +101,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     public void addList(List<String> updata_list) {
         int position = list.size();
         list.addAll(position, updata_list);
+
+
         //三种方式都行.
         notifyItemInserted(position);
         //notifyDataSetChanged();
