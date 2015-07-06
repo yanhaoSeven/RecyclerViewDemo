@@ -97,11 +97,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         }
     }
 
+    //加载更多的方法
     public void addList(List<String> updata_list) {
-        int position=list.size();
+        int position = list.size();
         list.addAll(position, updata_list);
         notifyItemInserted(position);
     }
+
+    //下拉刷新
+    public void upData(List<String> upData) {
+        list.addAll(0, upData);
+        notifyItemInserted(0);
+    }
+
 
     public interface ItemClick {
         void onItemClick(int position, View view);
