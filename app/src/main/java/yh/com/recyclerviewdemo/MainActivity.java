@@ -2,34 +2,21 @@ package yh.com.recyclerviewdemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import yh.com.recyclerviewdemo.adapter.MyViewPagerAdapter;
-import yh.com.recyclerviewdemo.data.MyData;
-import yh.com.recyclerviewdemo.adapter.MyAdapter;
 import yh.com.recyclerviewdemo.fragment.Fragment1;
 import yh.com.recyclerviewdemo.fragment.Fragment2;
 import yh.com.recyclerviewdemo.fragment.Fragment3;
-import yh.com.recyclerviewdemo.util.DividerItemDecoration;
 
 
 public class MainActivity extends AppCompatActivity {
