@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         adapter = new MyAdapter(list, MainActivity.this);
 
+
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL_LIST));
 
@@ -87,12 +89,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-            }
-
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (!loading && manager.findLastVisibleItemPosition() == list.size() - 1) {
+                if (!loading && adapter.getItemCount() == (manager.findLastVisibleItemPosition() + 1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     loading = true;
                     Toast.makeText(MainActivity.this, "加载更多", Toast.LENGTH_SHORT).show();
                     int position = list.size();
@@ -101,6 +98,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     adapter.addList(list_loading);
                     loading = false;
                 }
+            }
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                if (!loading && manager.findLastVisibleItemPosition() == list.size() - 1) {
+//                    loading = true;
+//                    Toast.makeText(MainActivity.this, "加载更多", Toast.LENGTH_SHORT).show();
+//                    int position = list.size();
+//                    index++;
+//                    List<String> list_loading = MyData.getListData(index);
+//                    adapter.addList(list_loading);
+//                    loading = false;
+//                }
+                mSwipeRefreshLayout.setEnabled(manager.findFirstCompletelyVisibleItemPosition() == 0);
             }
         });
 

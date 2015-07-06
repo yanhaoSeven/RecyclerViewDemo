@@ -101,13 +101,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     public void addList(List<String> updata_list) {
         int position = list.size();
         list.addAll(position, updata_list);
+        //三种方式都行.
         notifyItemInserted(position);
+        //notifyDataSetChanged();
+        //notifyItemRangeInserted(position,updata_list.size());
     }
 
     //下拉刷新
     public void upData(List<String> upData) {
         list.addAll(0, upData);
-        notifyItemInserted(0);
+        //notifyItemInserted(0);//-->bug，刷新的时候只能显示一个item，只有上推了之后再下拉才能显示所有的加载数据
+        notifyDataSetChanged();//-->能完全显示下拉刷新的数据,推荐使用
+        //notifyItemRangeChanged(0, upData.size());//-->能完全显示下拉刷新的数据
+        //notifyItemRangeInserted(0,upData.size());//-->能完全显示下拉刷新的数据，但是数据请求完了之后item还是进来的第一个，只能下拉才能看到刚才的数据
     }
 
 
