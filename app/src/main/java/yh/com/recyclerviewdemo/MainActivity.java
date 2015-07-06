@@ -1,43 +1,45 @@
 package yh.com.recyclerviewdemo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import yh.com.recyclerviewdemo.Data.MyData;
+import yh.com.recyclerviewdemo.adapter.MyViewPagerAdapter;
+import yh.com.recyclerviewdemo.data.MyData;
 import yh.com.recyclerviewdemo.adapter.MyAdapter;
+import yh.com.recyclerviewdemo.fragment.Fragment1;
+import yh.com.recyclerviewdemo.fragment.Fragment2;
+import yh.com.recyclerviewdemo.fragment.Fragment3;
 import yh.com.recyclerviewdemo.util.DividerItemDecoration;
 
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager manager;
-    private MyAdapter adapter;
-    private List<String> list;
-    private int upIndex = 0;//刷新下标
-    private int index = 0;//加载更多下标
-    private boolean loading = false;
+public class MainActivity extends AppCompatActivity {
+    private DrawerLayout mDrawerLayout;
+    private NavigationView nav_view;
+    private Toolbar toolbar;
 
-    private Handler handler = new Handler();
-
-    private final Runnable r = new Runnable() {
-        @Override
-        public void run() {
-            List<String> upListData = MyData.upListData(upIndex);
-            adapter.upData(upListData);
-            upIndex++;
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    };
+    private TabLayout tab;
+    private ViewPager viewPager;
+    private MyViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,81 +50,69 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void findViewById() {
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.mSwipeRefreshLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            bar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            bar.setDisplayHomeAsUpEnabled(true);
+        }
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
 
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.color1, R.color.color2, R.color.color3, R.color.color4);
+        nav_view = (NavigationView) findViewById(R.id.nav_view);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        if (nav_view != null) {
+            setupDrawerContent(nav_view);
+        }
+        tab = (TabLayout) findViewById(R.id.tab);
+        tab.setTabTextColors(Color.WHITE,Color.GRAY);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+        }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.mrecyclerview);
-        manager = new LinearLayoutManager(MainActivity.this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        list = MyData.getListData(index);
-
-        adapter = new MyAdapter(list, MainActivity.this);
-
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL_LIST));
-
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mRecyclerView.setAdapter(adapter);
-
-        adapter.setmItemClick(new MyAdapter.ItemClick() {
-            @Override
-            public void onItemClick(int position, View view) {
-                Toast.makeText(MainActivity.this, "单击事件" + list.get(position).toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        adapter.setmLongClick(new MyAdapter.LongClick() {
-            @Override
-            public void onLongItemClick(int position, View view) {
-                Toast.makeText(MainActivity.this, "长按事件" + list.get(position).toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!loading && adapter.getItemCount() == (manager.findLastVisibleItemPosition() + 1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    loading = true;
-                    Toast.makeText(MainActivity.this, "加载更多", Toast.LENGTH_SHORT).show();
-                    int position = list.size();
-                    index++;
-                    List<String> list_loading = MyData.getListData(index);
-                    adapter.addList(list_loading);
-                    loading = false;
-                }
-            }
-
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                if (!loading && manager.findLastVisibleItemPosition() == list.size() - 1) {
-//                    loading = true;
-//                    Toast.makeText(MainActivity.this, "加载更多", Toast.LENGTH_SHORT).show();
-//                    int position = list.size();
-//                    index++;
-//                    List<String> list_loading = MyData.getListData(index);
-//                    adapter.addList(list_loading);
-//                    loading = false;
-//                }
-                mSwipeRefreshLayout.setEnabled(manager.findFirstCompletelyVisibleItemPosition() == 0);
-            }
-        });
-
+        if(tab!=null){
+            tab.setupWithViewPager(viewPager);
+        }
 
     }
 
-    //下拉刷新
+
+    private void setupDrawerContent(NavigationView mNavigationView) {
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                mDrawerLayout.closeDrawers();
+                if (menuItem.getItemId() == R.id.nav_home) {
+                    Toast.makeText(MainActivity.this, "点击了:home1", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.nav_viewpager) {
+                    Toast.makeText(MainActivity.this, "点击了:home2", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.nav_subsamplingScale) {
+                    Toast.makeText(MainActivity.this, "点击了:home3", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.nav_gifview) {
+                    Toast.makeText(MainActivity.this, "点击了:home4", Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+            }
+        });
+    }
+
+
     @Override
-    public void onRefresh() {
-        handler.removeCallbacks(r);
-        handler.postDelayed(r, 3000);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setupViewPager(ViewPager upViewPager) {
+        viewPagerAdapter=new MyViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new Fragment1(),"recyclerView");
+        viewPagerAdapter.addFragment(new Fragment2(),"测试2");
+        viewPagerAdapter.addFragment(new Fragment3(),"测试3");
+        viewPager.setAdapter(viewPagerAdapter);
     }
 }
