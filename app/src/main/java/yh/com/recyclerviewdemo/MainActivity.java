@@ -1,6 +1,8 @@
 package yh.com.recyclerviewdemo;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +17,28 @@ import yh.com.recyclerviewdemo.adapter.MyAdapter;
 import yh.com.recyclerviewdemo.util.DividerItemDecoration;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager manager;
     private MyAdapter adapter;
     private List<String> list;
-    private int index = 0;//加载下标
+    private int upIndex = 0;//刷新下标
+    private int index = 0;//加载更多下标
     private boolean loading = false;
+
+    private Handler handler = new Handler();
+
+    private final Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            List<String> upListData = MyData.upListData(upIndex);
+            adapter.upData(upListData);
+            upIndex++;
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViewById() {
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.mSwipeRefreshLayout);
+
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.color1, R.color.color2, R.color.color3, R.color.color4);
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.mrecyclerview);
         manager = new LinearLayoutManager(MainActivity.this);
@@ -82,5 +105,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    //下拉刷新
+    @Override
+    public void onRefresh() {
+        handler.removeCallbacks(r);
+        handler.postDelayed(r, 3000);
     }
 }
