@@ -13,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.List;
 
 import yh.com.recyclerviewdemo.Data.MyData;
+import yh.com.recyclerviewdemo.MyApplication;
 import yh.com.recyclerviewdemo.R;
 import yh.com.recyclerviewdemo.adapter.MyAdapter;
 import yh.com.recyclerviewdemo.util.DividerItemDecoration;
@@ -131,5 +134,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     public void onRefresh() {
         handler.removeCallbacks(r);
         handler.postDelayed(r, 3000);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //tv_leak.setText(LeakHelpr.getInstance(MainActivity.this));
+        RefWatcher refWatcher= MyApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 }

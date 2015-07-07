@@ -2,7 +2,9 @@ package yh.com.recyclerviewdemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -11,12 +13,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.leakcanary.RefWatcher;
 
 import yh.com.recyclerviewdemo.adapter.MyViewPagerAdapter;
 import yh.com.recyclerviewdemo.fragment.Fragment1;
 import yh.com.recyclerviewdemo.fragment.Fragment2;
 import yh.com.recyclerviewdemo.fragment.Fragment3;
+import yh.com.recyclerviewdemo.util.LeakHelpr;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tab;
     private ViewPager viewPager;
     private MyViewPagerAdapter viewPagerAdapter;
+
+    private TextView tv_leak;//用于内存检测
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,23 @@ public class MainActivity extends AppCompatActivity {
         if(tab!=null){
             tab.setupWithViewPager(viewPager);
         }
+
+        tv_leak= (TextView) findViewById(R.id.tv_leak);
+        LeakHelpr.getInstance(this.getApplicationContext()).setRetainedTextView(tv_leak);
+
+        fab= (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v,"测试FloatingActionButton",Snackbar.LENGTH_SHORT).setAction("action", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this,"qqqq",Toast.LENGTH_SHORT).show();
+                    }
+                }).show();
+            }
+        });
 
     }
 
@@ -101,5 +129,14 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new Fragment2(),"测试2");
         viewPagerAdapter.addFragment(new Fragment3(),"测试3");
         viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LeakHelpr.getInstance(this.getApplicationContext()).setRemoveTextView();
+
+        RefWatcher refWatcher=MyApplication.getRefWatcher(this);
+        refWatcher.watch(this);
     }
 }
