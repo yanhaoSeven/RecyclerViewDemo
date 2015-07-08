@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_dashboard.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_event.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_forum.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_headset.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_menu.png" charset="GBK" />
-    <file url="PROJECT" charset="UTF-8" />
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/yh/com/recyclerviewdemo/adapter/WeiXinNewsAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/yh/com/recyclerviewdemo/bean/WeiXinAPI.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/yh/com/recyclerviewdemo/db/DbHelp.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/yh/com/recyclerviewdemo/fragment/Fragment2.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/yh/com/recyclerviewdemo/util/Contant.java" charset="UTF-8" />
   </component>
 </project>
