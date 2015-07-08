@@ -43,8 +43,6 @@ public class Fragment2 extends Fragment {
     private WeiXinNewsAdapter adapter;
     private List<WeiXinAPI> list_weixin = new ArrayList<WeiXinAPI>();
     private DbManager dbManager = null;
-
-
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
